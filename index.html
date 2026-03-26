@@ -319,8 +319,8 @@
         });
 
         // --- Chat ---
-        const API_URL = window.__OPENCLAW_API_URL || '';
-        const API_TOKEN = window.__OPENCLAW_API_TOKEN || '';
+        const API_URL = 'https://pedro-chat-proxy.lorenrarb.workers.dev';
+        const API_TOKEN = ''; // Token handled server-side by Worker
 
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
@@ -340,16 +340,11 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
             try {
-                const res = await fetch(API_URL + '/v1/chat/completions', {
+                const res = await fetch(API_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + API_TOKEN
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        model: 'openclaw:main',
-                        messages: [{ role: 'user', content: text }],
-                        stream: false
+                        messages: [{ role: 'system', content: 'You are Pedro, an AI assistant embedded in the Sound WiFi financial dashboard. Answer questions about the company finances, QuickBooks data, and business metrics. Keep answers concise and relevant to Sound WiFi.' }, { role: 'user', content: text }]
                     })
                 });
                 const data = await res.json();
